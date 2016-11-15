@@ -62,7 +62,7 @@ var flash = require('connect-flash');
 var mongodb = require('mongodb');
 var ObjectId = mongodb.ObjectID;
 //URL DE CONNEXION A LA BASE DE DONNÉES
-var MONGODB_URI = 'mongodb://heroku_7x171lxz:ejt2fj0qj1ak9sb26b60qtbl1k@ds053156.mlab.com:53156/heroku_7x171lxz';
+var MONGODB_URI = 'mongodb://heroku_5zhctz3n:tmm17magpnlkp8p1tmpeod8b68@ds029585.mlab.com:29585/heroku_5zhctz3n';
 
 //CREATION D'UN POINTEUR VERS LA BASE DE DONNÉES
 var db;
