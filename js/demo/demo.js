@@ -13,7 +13,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db,users) {
 	app.get('/home',function(req,res){
 		res.json({statut:1});
 		//RECUPERER UN UTILISATEUR AVEC SON IDENTIFIANT
-		var identifiant = "";
+		var identifiant = req.query.identifiant;
 		//NE PAS OUBLIER ObjectId() devant l'identifiant
 
 		//POUR RECUPERER UN ET UN SEUL UTILISATEUR
