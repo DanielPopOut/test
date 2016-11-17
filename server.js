@@ -83,6 +83,7 @@ mongodb.MongoClient.connect(MONGODB_URI, function(err, database) {
 
 	//ON INCLU UN SCRIPT QUI VA CONTENIR NOS ENDPOINT
 	require('./js/demo/demo.js')(app,bcrypt,dateFormat,ObjectId,db,users);
+	require('./js/endpoints/user.js')(app,bcrypt,dateFormat,ObjectId,db);
 
 	//DEMARRE LE SERVEUR
 	server.listen(app.get('port'));
