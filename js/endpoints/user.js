@@ -9,6 +9,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		//RECUPERER UN UTILISATEUR AVEC SON IDENTIFIANT
 		var identifiant = req.query.identifiant;
 		//NE PAS OUBLIER ObjectId() devant l'identifiant
+		//que se passe-t-il ?
 
 		//POUR RECUPERER UN ET UN SEUL UTILISATEUR
 		userdb.findOne(
