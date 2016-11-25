@@ -5,7 +5,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 	var credentialdb = db.collection(collectionName);
 
 	//Récupérer un utilisateur en entrant son id dans la requete
-	app.get('credential',function(req,res){
+	app.get('/credential',function(req,res){
 		// res.json({statut:1});
 		//RECUPERER UN UTILISATEUR AVEC SON IDENTIFIANT
 		var identifiant = req.query.identifiant;
