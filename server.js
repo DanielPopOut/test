@@ -68,6 +68,7 @@ var MONGODB_URI = 'mongodb://heroku_5zhctz3n:tmm17magpnlkp8p1tmpeod8b68@ds029585
 var db;
 //CREATION D'UN POINTEUR VERS UN DOCUMENT
 var users;
+var credentialdb;
 
 //CONNEXION A LA BASE DE DONNEE MONGODB VIA URL
 mongodb.MongoClient.connect(MONGODB_URI, function(err, database) {
@@ -80,10 +81,15 @@ mongodb.MongoClient.connect(MONGODB_URI, function(err, database) {
 	db = database;
 	//USERS C'EST MON DOCUMENT
 	users = db.collection('users');
+	credentialdb = db.collection('credential');
 
 	//ON INCLU UN SCRIPT QUI VA CONTENIR NOS ENDPOINT
 	require('./js/demo/demo.js')(app,bcrypt,dateFormat,ObjectId,db,users);
 	require('./js/endpoints/user.js')(app,bcrypt,dateFormat,ObjectId,db);
+	require('./js/endpoints/credential.js')(app,bcrypt,dateFormat,ObjectId,db, credentialdb);
+	require('./js/endpoints/event.js')(app,bcrypt,dateFormat,ObjectId,db);
+	require('./js/endpoints/friend.js')(app,bcrypt,dateFormat,ObjectId,db);
+	require('./js/endpoints/participant.js')(app,bcrypt,dateFormat,ObjectId,db);
 
 	//DEMARRE LE SERVEUR
 	server.listen(app.get('port'));
