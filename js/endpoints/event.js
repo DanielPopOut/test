@@ -5,7 +5,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 	var eventdb = db.collection(collectionName);
 
 	//Récupérer un utilisateur en entrant son id dans la requete
-	app.get(callAdress,function(req,res){
+	app.get('/event',function(req,res){
 		// res.json({statut:1});
 		//RECUPERER UN UTILISATEUR AVEC SON IDENTIFIANT
 		var identifiant = req.query.identifiant;
@@ -27,7 +27,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 	});
 
 
-	app.put(callAdress,function(req,res){
+	app.put('/event',function(req,res){
 		var valueToInsert = req.body;
 		valueToInsert.created = new Date();
 		valueToInsert.modified = new Date();
@@ -50,7 +50,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		});
 
 		//enregistrer un utilisateur
-	app.post(callAdress,function(req,res){
+	app.post('/event',function(req,res){
 		var valueToInsert = req.body;
 		valueToInsert.created = new Date();
 
@@ -69,7 +69,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		});
 
 
-	app.delete(callAdress,function(req,res){
+	app.delete('/event',function(req,res){
 		// res.json({statut:1});
 		//RECUPERER UN UTILISATEUR AVEC SON IDENTIFIANT
 		var identifiant = req.query.identifiant;

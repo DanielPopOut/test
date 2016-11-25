@@ -1,7 +1,7 @@
 module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 	//ici on a juste un id, mail et mdp
 	var collectionName = 'credential';
-	var callAdress = '/credential';
+	var callAdress = '/credential'en;
 	var credentialdb = db.collection(collectionName);
 
 	//Récupérer un utilisateur en entrant son id dans la requete
@@ -27,7 +27,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 	});
 
 
-	app.put(callAdress,function(req,res){
+	app.put('/credential',function(req,res){
 		var valueToInsert = req.body;
 		valueToInsert.created = new Date();
 		valueToInsert.modified = new Date();
@@ -50,7 +50,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		});
 
 		//enregistrer un utilisateur
-	app.post(callAdress,function(req,res){
+	app.post('/credential',function(req,res){
 		var valueToInsert = req.body;
 		valueToInsert.created = new Date();
 
@@ -69,7 +69,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		});
 
 
-	app.delete(callAdress,function(req,res){
+	app.delete('/credential',function(req,res){
 		// res.json({statut:1});
 		//RECUPERER UN UTILISATEUR AVEC SON IDENTIFIANT
 		var identifiant = req.query.identifiant;
