@@ -90,8 +90,3 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 	});
 
 }
-<<<<<<< HEAD
-
-
-=======
->>>>>>> origin/master
