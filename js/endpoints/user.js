@@ -4,7 +4,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 	var userdb = db.collection(collectionName);
 
 	//Récupérer un utilisateur en entrant son id dans la requete
-	app.get('/user',function(req,res){
+	app.get(callAdress,function(req,res){
 		// res.json({statut:1});
 		//RECUPERER UN UTILISATEUR AVEC SON IDENTIFIANT
 		var identifiant = req.query.identifiant;
@@ -90,5 +90,8 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 	});
 
 }
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> origin/master
