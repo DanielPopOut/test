@@ -1,6 +1,6 @@
 module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 	var collectionName = 'user';
-	var callAdress = '/user';
+	var callAdress = "/user";
 	var userdb = db.collection(collectionName);
 
 	//Récupérer un utilisateur en entrant son id dans la requete

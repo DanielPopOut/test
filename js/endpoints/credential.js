@@ -1,7 +1,7 @@
 module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 	//ici on a juste un id, mail et mdp
 	var collectionName = 'credential';
-	var callAdress = '/credential';
+	var callAdress = "/credential";
 	var credentialdb = db.collection(collectionName);
 
 	//Récupérer un utilisateur en entrant son id dans la requete
