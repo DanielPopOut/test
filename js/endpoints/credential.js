@@ -62,7 +62,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 
 // test si le pseudo est déjà utilisé
 		userdb.findOne({pseudo : user.pseudo},function(err, result) {
-		   		console.log(resutl);
+		   		console.log(result);
 		   		if(err){
 		   			console.log('****************************');
 		   			console.log('Error while getting user for login');
