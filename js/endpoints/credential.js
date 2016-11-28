@@ -123,7 +123,47 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 
 		
 
-		
+		//enregistrer un utilisateur
+	app.post(callAdress+"/test",function(req,res){
+		var credentialToTest = req.body;
+
+		valueToInsert.created = new Date();
+
+		credentialdb.findOne(
+		   	{mail: credentialToTest.mail},function(err, result) {
+		   		console.log(result);
+		   		if(err){
+		   			console.log('****************************');
+		   			console.log('Error while getting' + collectionName + ' for login');
+		   			console.log('****************************');
+		   			res.json({statut:-1});
+		   		}else{
+		   			if(result== null){
+			   			res.json({statut:10,data:"unknown mail"});
+		   			}else{
+		   				if(credentialToTest.mdp ==result.mdp){
+		   					console.log(result);
+		   					userdb.findOne(
+							   	{_id: result._id},function(err, userResult) {
+							   		console.log(userResult);
+							   		if(err){
+							   			console.log('****************************');
+							   			console.log('Error while getting' + collectionName + ' for login');
+							   			console.log('****************************');
+							   			res.json({statut:-1});
+							   		}else{
+							   			res.json({statut:1,data:userResult});
+							   		}
+							   	}
+							);
+		   				}else{
+				   			res.json({statut:11,data:"wrong password"});
+		   				}
+		   			}
+		   		}
+		   	}
+		);
+		});	
 
 
 
