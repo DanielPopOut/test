@@ -34,7 +34,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		valueToInsert.modified = new Date();
 		var identifiant = req.query.identifiant;
 
-		userdb.update({_id: ObjectId(identifiant)},
+		credentialdb.update({_id: ObjectId(identifiant)},
 			valueToInsert,
 			{ upsert: false }
 			,function(err, result) {
@@ -56,9 +56,42 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		var credential = valueToInsert.credential;
 		var user = valueToInsert.user;
 
-		// credential.created = new Date();
-		// user.created = new Date();
+		credential.created = new Date();
+		user.created = new Date();
 
+
+		userdb.findOne(
+		   	{pseudo : user.pseudo},function(err, user) {
+		   		console.log(user);
+		   		if(err){
+		   			console.log('****************************');
+		   			console.log('Error while getting user for login');
+		   			console.log('****************************');
+		   			res.json({statut:-1});
+		   		}else{
+		   			if (user!=null){
+			   			res.json({statut:10,result: "pseudo already taken"});
+		   			}
+		   		}
+		   	}
+		);
+
+
+		credentialdb.findOne(
+		   	{mail : credential.mail},function(err, result) {
+		   		console.log(result);
+		   		if(err){
+		   			console.log('****************************');
+		   			console.log('Error while getting user for login');
+		   			console.log('****************************');
+		   			res.json({statut:-1});
+		   		}else{
+		   			if (result!=null){
+			   			res.json({statut:10,result: "mail already taken"});
+		   			}
+		   		}
+		   	}
+		);
 
 		credentialdb.insert(credential,function(err, result) {
 			if(err) {
@@ -82,7 +115,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 				console.log('********************************');
 				res.send(err);
 			}else{
-				res.json({statut:1,data:valueToInsert});
+				res.json({statut:1,data:result});
 			}	
 		})
 		});
