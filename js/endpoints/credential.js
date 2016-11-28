@@ -127,8 +127,6 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 	app.post(callAdress+"/test",function(req,res){
 		var credentialToTest = req.body;
 
-		valueToInsert.created = new Date();
-
 		credentialdb.findOne(
 		   	{mail: credentialToTest.mail},function(err, result) {
 		   		console.log(result);
