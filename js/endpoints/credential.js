@@ -3,6 +3,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 	var collectionName = 'credential';
 	var callAdress = '/credential';
 	var credentialdb = db.collection(collectionName);
+	var userdb = db.collection('user');
 
 	//Récupérer un utilisateur en entrant son id dans la requete
 	app.get('/credential',function(req,res){
@@ -48,6 +49,44 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 				}	
 		})
 		});
+
+		//enregistrer un utilisateur
+	app.post(callAdress+'/new_user',function(req,res){
+		var valueToInsert = req.body;
+		var credential = valueToInsert.credential;
+		var user = valueToInsert.user;
+
+		credential.created = new Date();
+		user.created = new Date();
+
+
+		credentialdb.insert(credential,function(err, result) {
+			if(err) {
+				console.log('********************************');
+				console.log('Error while post' + collectionName);
+				console.log(err);
+				console.log('********************************');
+				res.send(err);
+			}else{
+				credential.id=result._id;
+				user.id= result._id;
+			}	
+		})
+		userdb.insert(user,function(err, result) {
+			if(err) {
+				console.log('********************************');
+				console.log('Error while post' + collectionName);
+				console.log(err);
+				console.log('********************************');
+				res.send(err);
+			}else{
+				credential.id=result._id;
+				res.json({statut:1,data:valueToInsert});
+			}	
+		})
+		});
+
+
 
 		//enregistrer un utilisateur
 	app.post(callAdress,function(req,res){
