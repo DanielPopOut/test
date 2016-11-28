@@ -61,15 +61,15 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 
 
 // test si le pseudo est déjà utilisé
-		userdb.findOne({pseudo : user.pseudo},function(err, user) {
-		   		console.log(user);
+		userdb.findOne({pseudo : user.pseudo},function(err, result) {
+		   		console.log(resutl);
 		   		if(err){
 		   			console.log('****************************');
 		   			console.log('Error while getting user for login');
 		   			console.log('****************************');
 		   			res.json({statut:-1});
 		   		}else{
-		   			if (user!=null){
+		   			if (result!=null){
 			   			res.json({statut:10,result: "pseudo already taken"});
 		   			}else{
 		   				//test si le mail est déjà utilisé
