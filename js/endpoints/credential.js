@@ -56,8 +56,8 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		var credential = valueToInsert.credential;
 		var user = valueToInsert.user;
 
-		credential.created = new Date();
-		user.created = new Date();
+		// credential.created = new Date();
+		// user.created = new Date();
 
 
 		credentialdb.insert(credential,function(err, result) {
