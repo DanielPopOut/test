@@ -51,7 +51,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		});
 
 		//enregistrer un utilisateur
-	app.post('credential/new_user',function(req,res){
+	app.post('/credential/new_user',function(req,res){
 		var valueToInsert = req.body;
 		var credential = valueToInsert.credential;
 		var user = valueToInsert.user;
