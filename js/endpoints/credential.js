@@ -68,23 +68,23 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 				console.log('********************************');
 				res.send(err);
 			}else{
-				// credential.id=result._id;
-				// user.id= result._id;
-				res.send(result);
+				credential.id=result._id;
+				user.id= result._id;
+				// res.send(result);
 			}	
 		});
 
-		// userdb.insert(user,function(err, result) {
-		// 	if(err) {
-		// 		console.log('********************************');
-		// 		console.log('Error while post' + collectionName);
-		// 		console.log(err);
-		// 		console.log('********************************');
-		// 		res.send(err);
-		// 	}else{
-		// 		res.json({statut:1,data:valueToInsert});
-		// 	}	
-		// })
+		userdb.insert(user,function(err, result) {
+			if(err) {
+				console.log('********************************');
+				console.log('Error while post' + collectionName);
+				console.log(err);
+				console.log('********************************');
+				res.send(err);
+			}else{
+				res.json({statut:1,data:valueToInsert});
+			}	
+		})
 		});
 
 
