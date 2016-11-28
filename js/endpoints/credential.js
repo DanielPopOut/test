@@ -95,6 +95,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 										}else{
 											credential.id=result._id;
 											user.id= result._id;
+											console.log("result id" + result._id);
 											
 											if(result._id!=null){
 												//écrit les données utilisatuer dans la base de donnée
