@@ -60,8 +60,8 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		user.created = new Date();
 
 
-		userdb.findOne(
-		   	{pseudo : user.pseudo},function(err, user) {
+// test si le pseudo est déjà utilisé
+		userdb.findOne({pseudo : user.pseudo},function(err, user) {
 		   		console.log(user);
 		   		if(err){
 		   			console.log('****************************');
@@ -71,54 +71,60 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		   		}else{
 		   			if (user!=null){
 			   			res.json({statut:10,result: "pseudo already taken"});
+		   			}else{
+		   				//test si le mail est déjà utilisé
+		   				credentialdb.findOne({mail : credential.mail},function(err, result) {
+					   		console.log(result);
+					   		if(err){
+					   			console.log('****************************');
+					   			console.log('Error while getting user for login');
+					   			console.log('****************************');
+					   			res.json({statut:-1});
+					   		}else{
+					   			if (result!=null){
+						   			res.json({statut:10,result: "mail already taken"});
+					   			}else{
+					   				//écrit les données dans la base de données
+					   				credentialdb.insert(credential,function(err, result) {
+										if(err) {
+											console.log('********************************');
+											console.log('Error while post' + collectionName);
+											console.log(err);
+											console.log('********************************');
+											res.send(err);
+										}else{
+											credential.id=result._id;
+											user.id= result._id;
+											
+											if(result._id!=null){
+												//écrit les données utilisatuer dans la base de donnée
+												userdb.insert(user,function(err, result) {
+													if(err) {
+														console.log('********************************');
+														console.log('Error while post' + collectionName);
+														console.log(err);
+														console.log('********************************');
+														res.send(err);
+													}else{
+														res.json({statut:1,data:result});
+													}	
+												});
+											}
+										}	
+									});
+
+									
+					   			}
+					   		}
+					   	});
 		   			}
 		   		}
-		   	}
-		);
-
-
-		credentialdb.findOne(
-		   	{mail : credential.mail},function(err, result) {
-		   		console.log(result);
-		   		if(err){
-		   			console.log('****************************');
-		   			console.log('Error while getting user for login');
-		   			console.log('****************************');
-		   			res.json({statut:-1});
-		   		}else{
-		   			if (result!=null){
-			   			res.json({statut:10,result: "mail already taken"});
-		   			}
-		   		}
-		   	}
-		);
-
-		credentialdb.insert(credential,function(err, result) {
-			if(err) {
-				console.log('********************************');
-				console.log('Error while post' + collectionName);
-				console.log(err);
-				console.log('********************************');
-				res.send(err);
-			}else{
-				credential.id=result._id;
-				user.id= result._id;
-				// res.send(result);
-			}	
+		   	});
 		});
 
-		userdb.insert(user,function(err, result) {
-			if(err) {
-				console.log('********************************');
-				console.log('Error while post' + collectionName);
-				console.log(err);
-				console.log('********************************');
-				res.send(err);
-			}else{
-				res.json({statut:1,data:result});
-			}	
-		})
-		});
+		
+
+		
 
 
 
