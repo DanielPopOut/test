@@ -94,7 +94,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 											res.send(err);
 										}else{
 											credential.id=result._id;
-											user.id= result._id;
+											user._id= credential._id;
 											console.log("result id" + result._id);
 											
 												//écrit les données utilisatuer dans la base de donnée
@@ -106,7 +106,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 														console.log('********************************');
 														res.send(err);
 													}else{
-														res.json({statut:1,data:result});
+														res.json({statut:1,data:user});
 													}	
 												});
 										}	
