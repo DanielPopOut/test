@@ -51,7 +51,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		});
 
 		//enregistrer un utilisateur
-	app.post(callAdress+'/new_user',function(req,res){
+	app.post('credential/new_user',function(req,res){
 		var valueToInsert = req.body;
 		var credential = valueToInsert.credential;
 		var user = valueToInsert.user;
@@ -71,7 +71,8 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 				credential.id=result._id;
 				user.id= result._id;
 			}	
-		})
+		});
+		
 		userdb.insert(user,function(err, result) {
 			if(err) {
 				console.log('********************************');
@@ -80,7 +81,6 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 				console.log('********************************');
 				res.send(err);
 			}else{
-				credential.id=result._id;
 				res.json({statut:1,data:valueToInsert});
 			}	
 		})
