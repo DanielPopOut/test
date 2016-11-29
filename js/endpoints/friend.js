@@ -14,7 +14,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 
 		//POUR RECUPERER UN ET UN SEUL UTILISATEUR
 		frienddb.find(
-		   	{ $or: [ { user1Id: identifiant }, { user2Id: identifiant } ] } ).toArray(function(err, docs) {
+		   	{ user1Id: identifiant } ).toArray(function(err, docs) {
 		   		console.log(docs);
 		   		if(err){
 					console.log('****************************');
@@ -27,7 +27,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		   	});
 
 	   	frienddb.find(
-	   	{ $or: [ { user1Id: identifiant }, { user2Id: identifiant } ] } ).toArray(function(err, docs2) {
+	   	{  user2Id: identifiant } ).toArray(function(err, docs2) {
 	   		console.log(docs2);
 	   		if(err){
 				console.log('****************************');
