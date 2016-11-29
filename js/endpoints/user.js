@@ -17,6 +17,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		//POUR RECUPERER UN ET UN SEUL UTILISATEUR
 		userdb.findOne({pseudo: pseudoRecu},function(err, user) {
 		   		console.log(user);
+		   		console.log(askingId);
 		   		if(err){
 		   			console.log('****************************');
 		   			console.log('Error while getting user for login');
