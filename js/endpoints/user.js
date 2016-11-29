@@ -7,13 +7,13 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 	app.get('/user',function(req,res){
 		// res.json({statut:1});
 		//RECUPERER UN UTILISATEUR AVEC SON IDENTIFIANT
-		var identifiant = req.query.identifiant;
+		var pseudoRecu = req.query.pseudo;
 		//NE PAS OUBLIER ObjectId() devant l'identifiant
 		//que se passe-t-il ?
 
 		//POUR RECUPERER UN ET UN SEUL UTILISATEUR
 		userdb.findOne(
-		   	{_id: ObjectId(identifiant)},function(err, user) {
+		   	{pseudo: pseudoRecu},function(err, user) {
 		   		console.log(user);
 		   		if(err){
 		   			console.log('****************************');
@@ -21,7 +21,11 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		   			console.log('****************************');
 		   			res.json({statut:-1});
 		   		}else{
-		   			res.json({statut:1,data:user});
+		   			if(user!=null){
+		   				res.json({statut:1,data:user});
+		   			}else{
+		   				res.json({statut:0});
+		   			}
 		   		}
 		   	}
 		);
