@@ -29,7 +29,6 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 					}
 				}
 		   	})
-		);
 	});
 
 
