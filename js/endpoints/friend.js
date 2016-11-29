@@ -9,6 +9,8 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		// res.json({statut:1});
 		//RECUPERER UN UTILISATEUR AVEC SON IDENTIFIANT
 		var identifiant = req.query.id;
+		var results1;
+		var results2;
 
 		//POUR RECUPERER UN ET UN SEUL UTILISATEUR
 		frienddb.find(
@@ -20,15 +22,31 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		   			console.log('****************************');
 		   			res.json({statut:-1});
 				}else{
-					if(docs.length>0){
-						//SI ON A UN RESULTAT
-						res.json({statut:1,data:docs});
-					}else{
-						//SI ON N'A PAS DE RESULTATS
-						res.json({statut:0});
-					}
+						results1 = docs;
 				}
-		   	})
+		   	});
+
+	   	frienddb.find(
+	   	{ $or: [ { user1Id: identifiant }, { user2Id: identifiant } ] } ).toArray(function(err, docs2) {
+	   		console.log(docs2);
+	   		if(err){
+				console.log('****************************');
+	   			console.log('Error while getting user for login');
+	   			console.log('****************************');
+	   			res.json({statut:-1});
+			}else{
+				
+					results2 = docs2;
+			}
+	   	});
+
+	   	var results = results1.concat(results2);
+	   	if(results.length>0){
+	   		res.json({statut:1,data:results});
+	   	}else{
+	   		res.json({statut:0});
+	   	}
+					//SI ON A UN RESULTAT
 	});
 
 
