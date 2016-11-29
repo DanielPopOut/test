@@ -8,21 +8,27 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 	app.get(callAdress,function(req,res){
 		// res.json({statut:1});
 		//RECUPERER UN UTILISATEUR AVEC SON IDENTIFIANT
-		var identifiant = req.query.identifiant;
+		var identifiant = req.query.id;
 
 		//POUR RECUPERER UN ET UN SEUL UTILISATEUR
-		frienddb.findOne(
-		   	{_id: ObjectId(identifiant)},function(err, user) {
+		frienddb.find(
+		   	{ $or: [ { user1Id: identifiant }, { user2Id: identifiant } ] } ).toArray(function(err, docs) {
 		   		console.log(user);
 		   		if(err){
-		   			console.log('****************************');
-		   			console.log('Error while getting' + collectionName + ' for login');
+					console.log('****************************');
+		   			console.log('Error while getting user for login');
 		   			console.log('****************************');
 		   			res.json({statut:-1});
-		   		}else{
-		   			res.json({statut:1,data:user});
-		   		}
-		   	}
+				}else{
+					if(docs.length>0){
+						//SI ON A UN RESULTAT
+						res.json({statut:1,data:docs});
+					}else{
+						//SI ON N'A PAS DE RESULTATS
+						res.json({statut:0});
+					}
+				}
+		   	})
 		);
 	});
 
