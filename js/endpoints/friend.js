@@ -40,7 +40,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 			}
 	   	});
 
-	   	var results = results1.concat(results2);
+	   	var results = results2.concat(results1);
 	   	if(results.length>0){
 	   		res.json({statut:1,data:results});
 	   	}else{
