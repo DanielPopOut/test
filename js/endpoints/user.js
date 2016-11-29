@@ -27,6 +27,8 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		   			if(user!=null){
 		   				frienddb.findOne({user1Id: askingId, user2Id: user._id},function(err, result) {
 					   		console.log(result);
+					   		console.log(askingId);
+					   		console.log(user._id);
 					   		if(err){
 					   			console.log('****************************');
 					   			console.log('Error while getting user for login');
