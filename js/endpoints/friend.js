@@ -13,7 +13,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		//POUR RECUPERER UN ET UN SEUL UTILISATEUR
 		frienddb.find(
 		   	{ $or: [ { user1Id: identifiant }, { user2Id: identifiant } ] } ).toArray(function(err, docs) {
-		   		console.log(user);
+		   		console.log(docs);
 		   		if(err){
 					console.log('****************************');
 		   			console.log('Error while getting user for login');
