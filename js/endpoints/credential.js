@@ -1,5 +1,5 @@
 module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
-	//ici on a juste un id, mail et mdp
+	//ici on a juste un id, mail et password
 	var collectionName = 'credential';
 	var callAdress = '/credential';
 	var credentialdb = db.collection(collectionName);
@@ -139,7 +139,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		   			if(result== null){
 			   			res.json({statut:10,data:"unknown mail"});
 		   			}else{
-		   				if(credentialToTest.mdp ==result.mdp){
+		   				if(credentialToTest.password ==result.password){
 		   					console.log(result);
 		   					userdb.findOne(
 							   	{_id: result._id},function(err, userResult) {
