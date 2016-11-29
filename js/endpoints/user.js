@@ -2,18 +2,20 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 	var collectionName = 'user';
 	var callAdress = "/user";
 	var userdb = db.collection(collectionName);
+	var frienddb = db.collection('friend');
 
 	//Récupérer un utilisateur en entrant son id dans la requete
 	app.get('/user',function(req,res){
 		// res.json({statut:1});
 		//RECUPERER UN UTILISATEUR AVEC SON IDENTIFIANT
 		var pseudoRecu = req.query.pseudo;
+		var askingId = req.query.id1;
+
 		//NE PAS OUBLIER ObjectId() devant l'identifiant
 		//que se passe-t-il ?
 
 		//POUR RECUPERER UN ET UN SEUL UTILISATEUR
-		userdb.findOne(
-		   	{pseudo: pseudoRecu},function(err, user) {
+		userdb.findOne({pseudo: pseudoRecu},function(err, user) {
 		   		console.log(user);
 		   		if(err){
 		   			console.log('****************************');
@@ -22,9 +24,22 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		   			res.json({statut:-1});
 		   		}else{
 		   			if(user!=null){
-		   				res.json({statut:1,data:user});
+		   				frienddb.findOne({user1Id: ObjectId(askingId), user2Id: ObjectId(user._id)},function(err, result) {
+					   		console.log(result);
+					   		if(err){
+					   			console.log('****************************');
+					   			console.log('Error while getting user for login');
+					   			console.log('****************************');
+					   			res.json({statut:-1});
+					   		}else{
+					   			if (result == null){
+					   				res.json({statut:1,data:user});
+					   			}else{
+					   				res.json({statut:1,data:user, state:result.state});
+					   			}
+					   		})
 		   			}else{
-		   				res.json({statut:0});
+		   				res.json({statut:0});as
 		   			}
 		   		}
 		   	}
