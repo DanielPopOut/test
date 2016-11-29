@@ -24,7 +24,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		   			res.json({statut:-1});
 		   		}else{
 		   			if(user!=null){
-		   				frienddb.findOne({user1Id: ObjectId(askingId), user2Id: ObjectId(user._id)},function(err, result) {
+		   				frienddb.findOne({user1Id: askingId, user2Id: user._id},function(err, result) {
 					   		console.log(result);
 					   		if(err){
 					   			console.log('****************************');
@@ -33,14 +33,14 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 					   			res.json({statut:-1});
 					   		}else{
 					   			if (result == null){
-					   				res.json({statut:1,data:user});
+					   				res.json({statut:1,data:user,state:-1});
 					   			}else{
 					   				res.json({statut:1,data:user, state:result.state});
 					   			}
 					   		}
 					   	})
 		   			}else{
-		   				res.json({statut:0});as
+		   				res.json({statut:0});
 		   			}
 		   		}
 		   	}
