@@ -27,16 +27,24 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 						for (var i = 0; i < docs.length; i++) {
 							console.log(docs[i]);
 							if(docs[i].user1Id == identifiant){
-								friendId_list.push(docs[i].user2Id);
+								friendId_list.push(ObjectId(docs[i].user2Id);
 							}else {
-								friendId_list.push(docs[i].user1Id);
+								friendId_list.push(ObjectId(docs[i].user1Id);
 							}
 						};
 						console.log(friendId_list);
 						userdb.find({ _id: { $in: friendId_list } }).toArray(function(err, users) {
 							console.log(users);
+							if(err){
+
+							}else{
+								if(users.length>0){
+									res.json({statut:1,data:users});
+								}else{
+									res.json({statut:0});
+								}
+							}
 						});
-						res.json({statut:1,data:docs});
 					}else{
 						//SI ON N'A PAS DE RESULTATS
 						res.json({statut:0});
