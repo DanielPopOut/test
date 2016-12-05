@@ -34,7 +34,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 						console.log(friendId_list);
 						userdb.find({ _id: { $in: friendId_list } }).toArray(function(err, users) {
 							console.log(users);
-						}
+						});
 						res.json({statut:1,data:docs});
 					}else{
 						//SI ON N'A PAS DE RESULTATS
