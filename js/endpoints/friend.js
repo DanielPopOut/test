@@ -3,12 +3,14 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 	var collectionName = 'friend';
 	var callAdress = '/friend';
 	var frienddb = db.collection(collectionName);
+	var userdb = db.collection('user');
 
 	//Récupérer un utilisateur en entrant son id dans la requete
 	app.get(callAdress,function(req,res){
 		// res.json({statut:1});
 		//RECUPERER UN UTILISATEUR AVEC SON IDENTIFIANT
 		var identifiant = req.query.id;
+		var friendId_list = [];
 
 		//POUR RECUPERER UN ET UN SEUL UTILISATEUR
 		frienddb.find(
@@ -22,6 +24,17 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 				}else{
 					if(docs.length>0){
 						//SI ON A UN RESULTAT
+						for (var i = 0; i < docs.length; i++) {
+							if(docs[i].user1Id == identifiant){
+								friendId_list.push(docs[i].user2Id);
+							}else {
+								friendId_list.push(docs[i].user1Id);
+							}
+						};
+						console.log(friendId_list);
+						userdb.find({ _id: { $in: friendId_list } }).toArray(function(err, users) {
+							console.log(users);
+						}
 						res.json({statut:1,data:docs});
 					}else{
 						//SI ON N'A PAS DE RESULTATS
@@ -58,7 +71,6 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 	app.post(callAdress,function(req,res){
 		var valueToInsert = req.body;
 		valueToInsert.created = new Date();
-
 
 		frienddb.insert(valueToInsert,function(err, result) {
 			if(err) {
