@@ -27,9 +27,9 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 						for (var i = 0; i < docs.length; i++) {
 							console.log(docs[i]);
 							if(docs[i].user1Id == identifiant){
-								friendId_list.push(ObjectId(docs[i].user2Id);
+								friendId_list.push(ObjectId(docs[i].user2Id));
 							}else {
-								friendId_list.push(ObjectId(docs[i].user1Id);
+								friendId_list.push(ObjectId(docs[i].user1Id));
 							}
 						};
 						console.log(friendId_list);
