@@ -26,6 +26,28 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		);
 	});
 
+	//Récupérer un utilisateur en entrant son id dans la requete
+	app.get('/event/user',function(req,res){
+		// res.json({statut:1});
+		//RECUPERER UN UTILISATEUR AVEC SON IDENTIFIANT
+		var identifiant = req.query.id;
+
+		//POUR RECUPERER UN ET UN SEUL UTILISATEUR
+		eventdb.find(
+		   	{adminId: identifiant}).toArray(function(err, events) {
+		   		console.log(events);
+		   		if(err){
+		   			console.log('****************************');
+		   			console.log('Error while getting' + collectionName + ' for login');
+		   			console.log('****************************');
+		   			res.json({statut:-1});
+		   		}else{
+		   			res.json({statut:1,data:events});
+		   		}
+		   	}
+		);
+	});
+
 
 	app.put('/event',function(req,res){
 		var valueToInsert = req.body;
