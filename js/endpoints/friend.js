@@ -25,6 +25,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 					if(docs.length>0){
 						//SI ON A UN RESULTAT
 						for (var i = 0; i < docs.length; i++) {
+							console.log(docs[i]);
 							if(docs[i].user1Id == identifiant){
 								friendId_list.push(docs[i].user2Id);
 							}else {
