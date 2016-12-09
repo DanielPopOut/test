@@ -66,7 +66,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 								for (var i = eventsToReturn.length - 1; i >= 0; i--) {
 									console.log("check valeur des id");
 									for (var j = eventIdList.length - 1; j >= 0; j--) {
-										if(eventIdList[j]==eventsToReturn[i]._id){
+										if(eventIdList[j].equals(eventsToReturn[i]._id)){
 											console.log("trouvé");
 											eventIdList.splice(j,1);
 										}
