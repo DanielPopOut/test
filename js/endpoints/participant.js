@@ -57,7 +57,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		var participantList = req.body.data;
 		console.log(participantList);
 		var participantToAdd;
-		for (var i = 0; i < participantList; i++) {
+		for (var i = 0; i < participantList.length; i++) {
 			console.log(participantList[i]);
 			participantToAdd = participantList[i];
 			participantToAdd.created = new Date();
