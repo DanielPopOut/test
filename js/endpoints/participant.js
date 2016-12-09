@@ -4,6 +4,9 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 	var callAdress = '/participant';
 	var participantdb = db.collection(collectionName);
 
+	participantdb.createIndex( { eventId: 1, guestId: 1}, { unique: true } );
+
+
 	//Récupérer un utilisateur en entrant son id dans la requete
 	app.get(callAdress,function(req,res){
 		// res.json({statut:1});
@@ -51,21 +54,25 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 
 		//enregistrer un utilisateur
 	app.post(callAdress,function(req,res){
-		var valueToInsert = req.body;
-		valueToInsert.created = new Date();
-
-
-		participantdb.insert(valueToInsert,function(err, result) {
-			if(err) {
-				console.log('********************************');
-				console.log('Error while post' + collectionName);
-				console.log(err);
-				console.log('********************************');
-				res.send(err);
-			}else{
-				res.json({statut:1,data:valueToInsert});
-			}	
+		var participantList = req.body;
+		var participantToAdd;
+		for (var i = 0; i < participantList; i++) {
+			participantToAdd = participantList[i];
+			participantToAdd..created = new Date();
+			userdb.update({eventId: participantToAdd.eventId, guestId: participantToAdd.guestId},
+			participantToAdd,
+			{ upsert: true }
+			,function(err, result) {
+				if(err) {
+					console.log('********************************');
+					console.log('Error while inserting ' + collectionName);
+					console.log(err);
+					console.log('********************************');
+					res.send(err);
+				}	
 		})
+		};
+		res.send({statut:1});
 		});
 
 
