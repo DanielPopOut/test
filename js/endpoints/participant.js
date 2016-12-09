@@ -55,23 +55,24 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		//enregistrer un utilisateur
 	app.post(callAdress,function(req,res){
 		var participantList = req.body;
+		console.log(participantList);
 		var participantToAdd;
 		for (var i = 0; i < participantList; i++) {
 			console.log(participantList[i]);
 			participantToAdd = participantList[i];
 			participantToAdd.created = new Date();
 			userdb.update({eventId: participantToAdd.eventId, guestId: participantToAdd.guestId},
-			participantToAdd,
-			{ upsert: true }
-			,function(err, result) {
-				if(err) {
-					console.log('********************************');
-					console.log('Error while inserting ' + collectionName);
-					console.log(err);
-					console.log('********************************');
-		   			res.json({statut:-1});
-				}	
-		})
+				participantToAdd,
+				{ upsert: true }
+				,function(err, result) {
+					if(err) {
+						console.log('********************************');
+						console.log('Error while inserting ' + collectionName);
+						console.log(err);
+						console.log('********************************');
+			   			res.json({statut:-1});
+					}	
+			})
 		};
 		res.json({statut:1});
 		});
