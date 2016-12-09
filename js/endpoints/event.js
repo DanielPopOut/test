@@ -67,13 +67,19 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 									console.log("check valeur des id");
 									var index = eventIdList.indexOf(eventsToReturn[i]._id);
 									console.log(eventIdList);
-									console.log(eventsToReturn[i]._id);
-									console.log(index);
+									console.log(eventsToReturn[i]._id.toString())
 									if(index>-1){
 										eventIdList.splice(index,1);
 										console.log("trouvé");
 									}
-								};		
+								};
+
+								console.log("eventIdList :");
+								console.log(eventIdList);
+
+								for (var i = eventIdList.length - 1; i >= 0; i--) {
+									eventIdList[i]=ObjectId(eventIdList[i]);
+								};	
 
 								//on cherche les events où l'utilisateur participe mais qu'il n'a pas créé
 								eventdb.find(
