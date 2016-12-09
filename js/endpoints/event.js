@@ -32,7 +32,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		// res.json({statut:1});
 		//RECUPERER UN UTILISATEUR AVEC SON IDENTIFIANT
 		var identifiant = req.query.id;
-		var eventsToReturn = [];$
+		var eventsToReturn = [];
 		var eventIdList = []; //contient les ids des events obtenus d'après participant
 
 
