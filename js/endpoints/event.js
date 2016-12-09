@@ -48,71 +48,73 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		   			res.json({statut:-1});
 		   		}else{
 		   			eventsToReturn = eventsToReturn.concat(events);
+					//on cherche tous les events auxquels il assiste
+					participantdb.find( { guestId: identifiant }, { eventId: 1 }).toArray(function(err, idList) {
+					   		if(err){
+					   			console.log('****************************');
+					   			console.log('Error while getting' + collectionName + ' for login');
+					   			console.log('****************************');
+					   			res.json({statut:-1});
+					   		}else{
+					   			for (var i = idList.length - 1; i >= 0; i--) {
+					   				eventIdList.push(idList[i].eventId);
+					   			};
+					   			console.log("idList : ");
+					   			console.log(idList);
+
+								//on check qu'il n'ya pas de doublon pour les ids des events
+								for (var i = eventsToReturn.length - 1; i >= 0; i--) {
+									console.log("check valeur des id");
+									var index = eventIdList.indexof(eventsToReturn[i]._id);
+									console.log(eventIdList);
+									console.log(eventsToReturn[i]._id)
+									if(index>-1){
+										eventIdList.splice(index,1);
+										console.log("trouvé");
+									}
+								};
+
+								console.log("eventIdList :");
+								console.log(eventIdList);
+
+								for (var i = eventIdList.length - 1; i >= 0; i--) {
+									eventIdList[i]=ObjectId(eventIdList[i]);
+								};
+
+								console.log("eventIdList :");
+								console.log(eventIdList);		
+
+								//on cherche les events où l'utilisateur participe mais qu'il n'a pas créé
+								eventdb.find(
+								   	{_id: { $in: eventIdList }}).toArray(function(err, events2) {
+								   		console.log("events2 : ");
+								   		console.log(events2);
+								   		if(err){
+								   			console.log('****************************');
+								   			console.log('Error while getting' + collectionName + ' for login');
+								   			console.log('****************************');
+								   			res.json({statut:-1});
+								   		}else{
+								   			eventsToReturn = eventsToReturn.concat(events2);
+								   			console.log("eventsToReturn : ");
+								   			console.log(eventsToReturn);
+
+								   			//on retourne le résulatt final
+								   			res.json({statut:1,data:eventsToReturn});
+
+								   		}
+								   	}
+								);
+
+					   		}
+					   	}
+					);
 		   		}
 		   	}
 		);
 
-		//on cherche tous les events auxquels il assiste
-		participantdb.find( { guestId: identifiant }, { eventId: 1 }).toArray(function(err, idList) {
-		   		if(err){
-		   			console.log('****************************');
-		   			console.log('Error while getting' + collectionName + ' for login');
-		   			console.log('****************************');
-		   			res.json({statut:-1});
-		   		}else{
-		   			for (var i = idList.length - 1; i >= 0; i--) {
-		   				eventIdList.push(idList[i].eventId);
-		   			};
-		   			console.log("idList : ");
-		   			console.log(idList);
-		   		}
-		   	}
-		);
 
-		//on check qu'il n'ya pas de doublon pour les ids des events
-		for (var i = eventsToReturn.length - 1; i >= 0; i--) {
-			console.log("check valeur des id");
-			var index = eventIdList.indexof(eventsToReturn[i]._id);
-			console.log(eventIdList);
-			console.log(eventsToReturn[i]._id)
-			if(index>-1){
-				eventIdList.splice(index,1);
-				console.log("trouvé");
-			}
-		};
-
-		console.log("eventIdList :");
-		console.log(eventIdList);
-
-		for (var i = eventIdList.length - 1; i >= 0; i--) {
-			eventIdList[i]=ObjectId(eventIdList[i]);
-		};
-
-		console.log("eventIdList :");
-		console.log(eventIdList);		
-
-		//on cherche les events où l'utilisateur participe mais qu'il n'a pas créé
-		eventdb.find(
-		   	{_id: { $in: eventIdList }}).toArray(function(err, events2) {
-		   		console.log("events2 : ");
-		   		console.log(events2);
-		   		if(err){
-		   			console.log('****************************');
-		   			console.log('Error while getting' + collectionName + ' for login');
-		   			console.log('****************************');
-		   			res.json({statut:-1});
-		   		}else{
-		   			eventsToReturn = eventsToReturn.concat(events2);
-		   			console.log("eventsToReturn : ");
-		   			console.log(eventsToReturn);
-
-		   			//on retourne le résulatt final
-		   			res.json({statut:1,data:eventsToReturn});
-
-		   		}
-		   	}
-		);
-
+		
 
 	});
 
