@@ -11,7 +11,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 	app.get(callAdress,function(req,res){
 		// res.json({statut:1});
 		//RECUPERER UN UTILISATEUR AVEC SON IDENTIFIANT
-		var identifiant = req.query.identifiant;
+		var identifiant = req.query.id;
 
 		//POUR RECUPERER UN ET UN SEUL UTILISATEUR
 		participantdb.find(
