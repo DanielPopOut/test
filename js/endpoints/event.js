@@ -3,6 +3,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 	var collectionName = 'event';
 	var callAdress = '/event';
 	var eventdb = db.collection(collectionName);
+	var participantdb = db.collection('participant');
 
 	//Récupérer un utilisateur en entrant son id dans la requete
 	app.get('/event',function(req,res){
@@ -31,6 +32,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		// res.json({statut:1});
 		//RECUPERER UN UTILISATEUR AVEC SON IDENTIFIANT
 		var identifiant = req.query.id;
+		var eventsToReturn;
 
 		//POUR RECUPERER UN ET UN SEUL UTILISATEUR
 		eventdb.find(
@@ -42,10 +44,58 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		   			console.log('****************************');
 		   			res.json({statut:-1});
 		   		}else{
-		   			res.json({statut:1,data:events});
+		   			eventsToReturn = eventsToReturn + events;
 		   		}
 		   	}
 		);
+
+		
+
+		var eventIdList = participantdb.find( { guestId: identifiant }, { eventId: 1 }).toArray(function(err, events) {
+		   		console.log(events);
+		   		if(err){
+		   			console.log('****************************');
+		   			console.log('Error while getting' + collectionName + ' for login');
+		   			console.log('****************************');
+		   			res.json({statut:-1});
+		   		}else{
+		   			eventsToReturn = eventsToReturn + events;
+		   		}
+		   	}
+		);
+
+		for (var i = eventsToReturn.length - 1; i >= 0; i--) {
+			var index = eventIdList.indexof(eventsToReturn[i]._id);
+			console.log(eventIdList);
+			console.log(eventsToReturn[i]._id)
+			if(index>-1){
+				eventIdList.splice(index,1);
+				console.log("trouvé");
+			}
+		};
+
+		for (var i = eventIdList.length - 1; i >= 0; i--) {
+			eventIdList[i]=ObjectId(eventIdList[i]);
+		};
+
+		eventdb.find(
+		   	{_id: { $in: eventIdList }}).toArray(function(err, events2) {
+		   		console.log("events2 : " +  events2);
+		   		if(err){
+		   			console.log('****************************');
+		   			console.log('Error while getting' + collectionName + ' for login');
+		   			console.log('****************************');
+		   			res.json({statut:-1});
+		   		}else{
+		   			eventsToReturn = eventsToReturn + events2;
+		   			console.log("eventsToReturn : " +  eventsToReturn);
+		   			res.json({statut:1,data:eventsToReturn});
+
+		   		}
+		   	}
+		);
+
+
 	});
 
 
