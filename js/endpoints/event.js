@@ -60,10 +60,11 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		   			console.log('****************************');
 		   			res.json({statut:-1});
 		   		}else{
-		   			eventIdList = idList;
+		   			for (var i = idList.length - 1; i >= 0; i--) {
+		   				eventIdList.push(idList[i].eventId);
+		   			};
 		   			console.log("idList : ");
 		   			console.log(idList);
-
 		   		}
 		   	}
 		);
@@ -80,9 +81,15 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 			}
 		};
 
+		console.log("eventIdList :");
+		console.log(eventIdList);
+
 		for (var i = eventIdList.length - 1; i >= 0; i--) {
 			eventIdList[i]=ObjectId(eventIdList[i]);
 		};
+
+		console.log("eventIdList :");
+		console.log(eventIdList);		
 
 		//on cherche les events où l'utilisateur participe mais qu'il n'a pas créé
 		eventdb.find(
