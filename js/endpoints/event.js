@@ -32,7 +32,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		// res.json({statut:1});
 		//RECUPERER UN UTILISATEUR AVEC SON IDENTIFIANT
 		var identifiant = req.query.id;
-		var eventsToReturn;
+		var eventsToReturn = [];
 
 		//POUR RECUPERER UN ET UN SEUL UTILISATEUR
 		eventdb.find(
@@ -44,15 +44,15 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		   			console.log('****************************');
 		   			res.json({statut:-1});
 		   		}else{
-		   			eventsToReturn = eventsToReturn + events;
+		   			eventsToReturn = eventsToReturn.concat(events);
 		   		}
 		   	}
 		);
 
 		
 
-		var eventIdList = participantdb.find( { guestId: identifiant }, { eventId: 1 }).toArray(function(err, events) {
-		   		console.log(events);
+		var eventIdList = participantdb.find( { guestId: identifiant }, { eventId: 1 }).toArray(function(err, idList) {
+		   		console.log("idList : " + idList);
 		   		if(err){
 		   			console.log('****************************');
 		   			console.log('Error while getting' + collectionName + ' for login');
@@ -87,7 +87,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		   			console.log('****************************');
 		   			res.json({statut:-1});
 		   		}else{
-		   			eventsToReturn = eventsToReturn + events2;
+		   			eventsToReturn = eventsToReturn.concat(events2);
 		   			console.log("eventsToReturn : " +  eventsToReturn);
 		   			res.json({statut:1,data:eventsToReturn});
 

@@ -45,7 +45,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 					console.log('Error while inserting ' + collectionName);
 					console.log(err);
 					console.log('********************************');
-					res.send(err);
+		   			res.json({statut:-1});
 				}else{
 					res.json({statut:1,data:valueToInsert});
 				}	
@@ -68,7 +68,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 					console.log('Error while inserting ' + collectionName);
 					console.log(err);
 					console.log('********************************');
-					res.send(err);
+		   			res.json({statut:-1});
 				}	
 		})
 		};
@@ -89,7 +89,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 					console.log('Error while inserting ' + collectionName);
 					console.log(err);
 					console.log('********************************');
-					res.send(err);
+		   			res.json({statut:-1});
 				}else{
 					res.send({statut:1});
 				}
