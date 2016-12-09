@@ -64,18 +64,12 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 
 								//on check qu'il n'ya pas de doublon pour les ids des events
 								for (var i = eventsToReturn.length - 1; i >= 0; i--) {
-									console.log("check valeur des id");
 									for (var j = eventIdList.length - 1; j >= 0; j--) {
 										if(eventIdList[j].equals(eventsToReturn[i]._id)){
-											console.log("trouvé");
-											eventIdList.splice(j,1);
+											eventIdList.splice(j,1); //on supprime l'élément déjà trouvé
 										}
 									};
-									console.log(eventIdList);
-									console.log(eventsToReturn[i]._id.toString())
 								};
-
-
 
 								//on cherche les events où l'utilisateur participe mais qu'il n'a pas créé
 								eventdb.find(

@@ -14,16 +14,16 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		var identifiant = req.query.identifiant;
 
 		//POUR RECUPERER UN ET UN SEUL UTILISATEUR
-		participantdb.findOne(
-		   	{_id: ObjectId(identifiant)},function(err, user) {
-		   		console.log(user);
+		participantdb.find(
+		   	{eventId: identifiant}).toArray(function(err, participants) {
+		   		console.log(participants);
 		   		if(err){
 		   			console.log('****************************');
 		   			console.log('Error while getting' + collectionName + ' for login');
 		   			console.log('****************************');
 		   			res.json({statut:-1});
 		   		}else{
-		   			res.json({statut:1,data:user});
+		   			res.json({statut:1,data:participants});
 		   		}
 		   	}
 		);
