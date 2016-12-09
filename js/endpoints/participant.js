@@ -36,7 +36,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		valueToInsert.modified = new Date();
 		var identifiant = req.query.identifiant;
 
-		userdb.update({_id: ObjectId(identifiant)},
+		participantdb.update({_id: ObjectId(identifiant)},
 			valueToInsert,
 			{ upsert: false }
 			,function(err, result) {
@@ -61,7 +61,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 			console.log(participantList[i]);
 			participantToAdd = participantList[i];
 			participantToAdd.created = new Date();
-			userdb.update({eventId: participantToAdd.eventId, guestId: participantToAdd.guestId},
+			participantdb.update({eventId: participantToAdd.eventId, guestId: participantToAdd.guestId},
 				participantToAdd,
 				{ upsert: true }
 				,function(err, result) {
@@ -82,7 +82,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		var joinParticipant = req.body;
 		var participantToAdd;
 		
-		userdb.update({eventId: joinParticipant.eventId, guestId: joinParticipant.guestId},
+		participantdb.update({eventId: joinParticipant.eventId, guestId: joinParticipant.guestId},
 			joinParticipant,
 			{ upsert: true }
 			,function(err, result) {
