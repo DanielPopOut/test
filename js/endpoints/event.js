@@ -57,7 +57,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 					   			res.json({statut:-1});
 					   		}else{
 					   			for (var i = idList.length - 1; i >= 0; i--) {
-					   				eventIdList.push(idList[i].eventId);
+					   				eventIdList.push(ObjectId(idList[i].eventId));
 					   			};
 					   			console.log("idList : ");
 					   			console.log(idList);
@@ -72,17 +72,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 										eventIdList.splice(index,1);
 										console.log("trouvé");
 									}
-								};
-
-								console.log("eventIdList :");
-								console.log(eventIdList);
-
-								for (var i = eventIdList.length - 1; i >= 0; i--) {
-									eventIdList[i]=ObjectId(eventIdList[i]);
-								};
-
-								console.log("eventIdList :");
-								console.log(eventIdList);		
+								};		
 
 								//on cherche les events où l'utilisateur participe mais qu'il n'a pas créé
 								eventdb.find(
