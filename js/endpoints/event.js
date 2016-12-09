@@ -32,9 +32,11 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		// res.json({statut:1});
 		//RECUPERER UN UTILISATEUR AVEC SON IDENTIFIANT
 		var identifiant = req.query.id;
-		var eventsToReturn = [];
+		var eventsToReturn = [];$
+		var eventIdList = []; //contient les ids des events obtenus d'après participant
 
-		//POUR RECUPERER UN ET UN SEUL UTILISATEUR
+
+		//on cherche tous les evnts où l'utilisateur est admin
 		eventdb.find(
 		   	{adminId: identifiant}).toArray(function(err, events) {
 		   		console.log("events with admin ID");
@@ -50,9 +52,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		   	}
 		);
 
-		
-
-		var eventIdList = [];
+		//on cherche tous les events auxquels il assiste
 		participantdb.find( { guestId: identifiant }, { eventId: 1 }).toArray(function(err, idList) {
 		   		if(err){
 		   			console.log('****************************');
@@ -68,7 +68,9 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		   	}
 		);
 
+		//on check qu'il n'ya pas de doublon pour les ids des events
 		for (var i = eventsToReturn.length - 1; i >= 0; i--) {
+			console.log("check valeur des id");
 			var index = eventIdList.indexof(eventsToReturn[i]._id);
 			console.log(eventIdList);
 			console.log(eventsToReturn[i]._id)
@@ -82,6 +84,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 			eventIdList[i]=ObjectId(eventIdList[i]);
 		};
 
+		//on cherche les events où l'utilisateur participe mais qu'il n'a pas créé
 		eventdb.find(
 		   	{_id: { $in: eventIdList }}).toArray(function(err, events2) {
 		   		console.log("events2 : ");
@@ -95,6 +98,8 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		   			eventsToReturn = eventsToReturn.concat(events2);
 		   			console.log("eventsToReturn : ");
 		   			console.log(eventsToReturn);
+
+		   			//on retourne le résulatt final
 		   			res.json({statut:1,data:eventsToReturn});
 
 		   		}
