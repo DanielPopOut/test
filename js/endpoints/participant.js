@@ -57,6 +57,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		var participantList = req.body;
 		var participantToAdd;
 		for (var i = 0; i < participantList; i++) {
+			console.log(participantList[i]);
 			participantToAdd = participantList[i];
 			participantToAdd.created = new Date();
 			userdb.update({eventId: participantToAdd.eventId, guestId: participantToAdd.guestId},
@@ -72,7 +73,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 				}	
 		})
 		};
-		res.send({statut:1});
+		res.json({statut:1});
 		});
 
 			//enregistrer un utilisateur
@@ -91,7 +92,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 					console.log('********************************');
 		   			res.json({statut:-1});
 				}else{
-					res.send({statut:1});
+					res.json({statut:1});
 				}
 		});
 		});

@@ -37,6 +37,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		//POUR RECUPERER UN ET UN SEUL UTILISATEUR
 		eventdb.find(
 		   	{adminId: identifiant}).toArray(function(err, events) {
+		   		console.log("events with admin ID");
 		   		console.log(events);
 		   		if(err){
 		   			console.log('****************************');
@@ -53,7 +54,6 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 
 		var eventIdList = [];
 		participantdb.find( { guestId: identifiant }, { eventId: 1 }).toArray(function(err, idList) {
-		   		console.log("idList : " + idList);
 		   		if(err){
 		   			console.log('****************************');
 		   			console.log('Error while getting' + collectionName + ' for login');
@@ -61,6 +61,9 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		   			res.json({statut:-1});
 		   		}else{
 		   			eventIdList = idList;
+		   			console.log("idList : ");
+		   			console.log(idList);
+
 		   		}
 		   	}
 		);
@@ -81,7 +84,8 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 
 		eventdb.find(
 		   	{_id: { $in: eventIdList }}).toArray(function(err, events2) {
-		   		console.log("events2 : " +  events2);
+		   		console.log("events2 : ");
+		   		console.log(events2);
 		   		if(err){
 		   			console.log('****************************');
 		   			console.log('Error while getting' + collectionName + ' for login');
@@ -89,7 +93,8 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		   			res.json({statut:-1});
 		   		}else{
 		   			eventsToReturn = eventsToReturn.concat(events2);
-		   			console.log("eventsToReturn : " +  eventsToReturn);
+		   			console.log("eventsToReturn : ");
+		   			console.log(eventsToReturn);
 		   			res.json({statut:1,data:eventsToReturn});
 
 		   		}
