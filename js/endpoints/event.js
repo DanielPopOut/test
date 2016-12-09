@@ -65,7 +65,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 								//on check qu'il n'ya pas de doublon pour les ids des events
 								for (var i = eventsToReturn.length - 1; i >= 0; i--) {
 									console.log("check valeur des id");
-									var index = eventIdList.indexof(eventsToReturn[i]._id);
+									var index = eventIdList.indexOf(eventsToReturn[i]._id);
 									console.log(eventIdList);
 									console.log(eventsToReturn[i]._id)
 									if(index>-1){
