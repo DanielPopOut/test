@@ -51,7 +51,8 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 
 		
 
-		var eventIdList = participantdb.find( { guestId: identifiant }, { eventId: 1 }).toArray(function(err, idList) {
+		var eventIdList = [];
+		participantdb.find( { guestId: identifiant }, { eventId: 1 }).toArray(function(err, idList) {
 		   		console.log("idList : " + idList);
 		   		if(err){
 		   			console.log('****************************');
@@ -59,7 +60,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		   			console.log('****************************');
 		   			res.json({statut:-1});
 		   		}else{
-		   			eventsToReturn = eventsToReturn + events;
+		   			eventIdList = idList;
 		   		}
 		   	}
 		);
