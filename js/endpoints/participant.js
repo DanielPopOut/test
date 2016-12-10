@@ -61,10 +61,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 					console.log(participantList[i]);
 					participantToAdd = participantList[i];
 					participantToAdd.created = new Date();
-					participantdb.update({eventId: participantToAdd.eventId, guestId: participantToAdd.guestId},
-						participantToAdd,
-						{ upsert: true }
-						,function(err, result) {
+					participantdb.insert(participantToAdd,function(err, result) {
 							if(err) {
 								console.log('********************************');
 								console.log('Error while inserting ' + collectionName);
