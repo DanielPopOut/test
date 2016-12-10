@@ -79,7 +79,6 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		//enregistrer un utilisateur
 	app.post(callAdress,function(req,res){
 		var friendToInsert = req.body;
-		friendToInsert.created = new Date();
 
 		if(friendToInsert.user1Id==friendToInsert.user2Id){
 			res.json({statut:10, result:"impossible to be friend with yourself ;)"});
@@ -100,6 +99,8 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		   				if (friendFound.state=="1"){
 		   					res.json({statut:10,result:"you are already friends"});
 		   				}else if(friendFound.state=="2"){
+		   					friendToInsert.modified=new Date();
+		   					friendToInsert.created = new Date();
 		   					frienddb.update({_id: friendFound._id},
 		   						friendToInsert,
 		   						{ upsert: false },
@@ -111,11 +112,12 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 										console.log('********************************');
 										res.send(err);
 									}else{
-										res.json({statut:1,data:result});
+										res.json({statut:1,data:result });
 									}	
 								})
 		   				}
 		   			}else {
+		   				friendToInsert.created = new Date();
 		   				frienddb.insert(friendToInsert,function(err, result) {
 							if(err) {
 								console.log('********************************');
