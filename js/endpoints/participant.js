@@ -80,11 +80,10 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 	app.post(callAdress+'/join',function(req,res){
 			var joinParticipant = req.body;
 
-			participantdb.findAndModify({
-				query: {eventId: joinParticipant.eventId, guestId: joinParticipant.guestId},
-				update: {$set: {status:joinParticipant.status, modified: new Date()} },
-				upsert: true,
-				remove: false },
+			participantdb.findAndModify({eventId: joinParticipant.eventId, guestId: joinParticipant.guestId},
+				[],
+				{$set: {status:joinParticipant.status, modified: new Date()} },
+				{upsert: true, new:true},
 				function(err, result) {
 					if(err) {
 						console.log('********************************');
@@ -93,7 +92,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 						console.log('********************************');
 			   			res.json({statut:-1});
 					}else{
-						res.json({statut:1});
+						res.json({statut:1,result:result});
 					}
 			});
 		});
