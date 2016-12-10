@@ -52,66 +52,49 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		})
 		});
 
-		//enregistrer un utilisateur
+		//enregistrer une liste de participants 
+		// !!!!!! ici si il y a une erreur, elle n'est pas retournée
 	app.post(callAdress,function(req,res){
 		var participantList = req.body.data;
 		var participantToAdd;
 		for (var j = 0; j < participantList.length; j++) {
-			(function(i){
-					console.log(participantList[i]);
-					participantToAdd = participantList[i];
-					participantToAdd.created = new Date();
-					participantdb.insert(participantToAdd,function(err, result) {
-							if(err) {
-								console.log('********************************');
-								console.log('Error while inserting ' + collectionName);
-								console.log(err);
-								console.log('********************************');
-					   			res.json({statut:-1});
-							}	
-					})
-				
-			})(j);
-		};
-		res.json({statut:1});
+				(function(i){
+						console.log(participantList[i]);
+						participantToAdd = participantList[i];
+						participantToAdd.created = new Date();
+						participantdb.insert(participantToAdd,function(err, result) {
+								if(err) {
+									console.log('********************************');
+									console.log('Error while inserting ' + collectionName);
+									console.log(err);
+									console.log('********************************');
+								}
+						})
+					
+				})(j);
+			};
+			res.json({statut:1});
 		});
-
-	function addParticipantandShowIt(participantToAddFunction){
-		participantToAdd = participantToAddFunction;
-					participantToAdd.created = new Date();
-					participantdb.update({eventId: participantToAdd.eventId, guestId: participantToAdd.guestId},
-						participantToAdd,
-						{ upsert: true }
-						,function(err, result) {
-							if(err) {
-								console.log('********************************');
-								console.log('Error while inserting ' + collectionName);
-								console.log(err);
-								console.log('********************************');
-					   			res.json({statut:-1});
-							}	
-					})
-	}
 
 			//enregistrer un utilisateur
 	app.post(callAdress+'/join',function(req,res){
-		var joinParticipant = req.body;
-		var participantToAdd;
-		
-		participantdb.update({eventId: joinParticipant.eventId, guestId: joinParticipant.guestId},
-			joinParticipant,
-			{ upsert: true }
-			,function(err, result) {
-				if(err) {
-					console.log('********************************');
-					console.log('Error while inserting ' + collectionName);
-					console.log(err);
-					console.log('********************************');
-		   			res.json({statut:-1});
-				}else{
-					res.json({statut:1});
-				}
-		});
+			var joinParticipant = req.body;
+
+			participantdb.findAndModify({
+				query: {eventId: joinParticipant.eventId, guestId: joinParticipant.guestId},
+				update : {$set: {status:joinParticipant.status, modified: new Date()} }
+				upsert: true }
+				,function(err, result) {
+					if(err) {
+						console.log('********************************');
+						console.log('Error while inserting ' + collectionName);
+						console.log(err);
+						console.log('********************************');
+			   			res.json({statut:-1});
+					}else{
+						res.json({statut:1});
+					}
+			});
 		});
 
 
