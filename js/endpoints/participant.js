@@ -59,7 +59,6 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		var participantToAdd;
 		for (var j = 0; j < participantList.length; j++) {
 			(function(i){
-				
 					console.log(participantList[i]);
 					participantToAdd = participantList[i];
 					participantToAdd.created = new Date();
@@ -77,9 +76,31 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 					})
 				
 			})(j);
+			console.log("j =");
+			console.log(j);
 		};
+		for (var b in participantList){
+			console.log(b);
+		}
 		res.json({statut:1});
 		});
+
+	function addParticipantandShowIt(participantToAddFunction){
+		participantToAdd = participantToAddFunction;
+					participantToAdd.created = new Date();
+					participantdb.update({eventId: participantToAdd.eventId, guestId: participantToAdd.guestId},
+						participantToAdd,
+						{ upsert: true }
+						,function(err, result) {
+							if(err) {
+								console.log('********************************');
+								console.log('Error while inserting ' + collectionName);
+								console.log(err);
+								console.log('********************************');
+					   			res.json({statut:-1});
+							}	
+					})
+	}
 
 			//enregistrer un utilisateur
 	app.post(callAdress+'/join',function(req,res){
