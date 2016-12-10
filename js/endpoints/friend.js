@@ -81,7 +81,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		var valueToInsert = req.body;
 		valueToInsert.created = new Date();
 
-		if((valueToInsert.user1Id).equals(valueToInsert.user2Id)){
+		if(valueToInsert.user1Id==valueToInsert.user2Id){
 			res.json({statut:10, result:"impossible to be friend with yourself ;)"});
 		}else{
 			frienddb.findAndModify({$or: [ { user1Id: valueToInsert.user1Id, user2Id: valueToInsert.user2Id }, { user1Id: valueToInsert.user2Id, user2Id: valueToInsert.user1Id }] },
