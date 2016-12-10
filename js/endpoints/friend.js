@@ -78,28 +78,77 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 
 		//enregistrer un utilisateur
 	app.post(callAdress,function(req,res){
-		var valueToInsert = req.body;
-		valueToInsert.created = new Date();
+		var friendToInsert = req.body;
+		friendToInsert.created = new Date();
 
 		if(valueToInsert.user1Id==valueToInsert.user2Id){
 			res.json({statut:10, result:"impossible to be friend with yourself ;)"});
 		}else{
-			frienddb.findAndModify({$or: [ { user1Id: valueToInsert.user1Id, user2Id: valueToInsert.user2Id }, { user1Id: valueToInsert.user2Id, user2Id: valueToInsert.user1Id }] },
-				[],
-				{$set: { modified: new Date()}},
-				{upsert: true, new:true},
-				function(err, result) {
-					if(err) {
-						console.log('********************************');
-						console.log('Error while post' + collectionName);
-						console.log(err);
-						console.log('********************************');
-						res.send(err);
-					}else{
-						res.json({statut:1,data:result});
-					}	
-				}
-			)
+			frienddb.findOne({$or: [ 
+				{ user1Id: valueToInsert.user1Id, user2Id: valueToInsert.user2Id }, 
+				{ user1Id: valueToInsert.user2Id, user2Id: valueToInsert.user1Id }
+				]},
+				function(err, friendFound) {
+		   		if(err){
+		   			console.log('****************************');
+		   			console.log('Error while getting user for login');
+		   			console.log('****************************');
+		   			res.json({statut:-1});
+		   		}else{
+		   			console.log(friendFound);
+		   			if (friendFound!=null){
+		   				if (friendFound.state=="1"){
+		   					res.json({statut:10,result:"you are already friends"});
+		   				}else if(friendFound.state=="2"){
+		   					frienddb.update({_id: friendFound._id},
+		   						friendToInsert,
+		   						{ upsert: false },
+		   						function(err, result) {
+									if(err) {
+										console.log('********************************');
+										console.log('Error while inserting user');
+										console.log(err);
+										console.log('********************************');
+										res.send(err);
+									}else{
+										res.json({statut:1,data:userToInsert});
+									}	
+								})
+		   				}
+		   			}else {
+		   				frienddb.insert(friendToInsert,function(err, result) {
+							if(err) {
+								console.log('********************************');
+								console.log('Error while inserting user');
+								console.log(err);
+								console.log('********************************');
+								res.send(err);
+							}else{
+								res.json({statut:1,data:userToInsert});
+							}	
+						})
+		   			}
+
+		   		}
+		   	});
+
+
+			// frienddb.findAndModify({$or: [ { user1Id: valueToInsert.user1Id, user2Id: valueToInsert.user2Id }, { user1Id: valueToInsert.user2Id, user2Id: valueToInsert.user1Id }] },
+			// 	[],
+			// 	{$set: { modified: new Date()}},
+			// 	{upsert: true, new:true},
+			// 	function(err, result) {
+			// 		if(err) {
+			// 			console.log('********************************');
+			// 			console.log('Error while post' + collectionName);
+			// 			console.log(err);
+			// 			console.log('********************************');
+			// 			res.send(err);
+			// 		}else{
+			// 			res.json({statut:1,data:result});
+			// 		}	
+			// 	}
+			// )
 		}
 		
 		});
