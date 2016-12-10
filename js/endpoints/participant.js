@@ -55,7 +55,6 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		//enregistrer un utilisateur
 	app.post(callAdress,function(req,res){
 		var participantList = req.body.data;
-		console.log(participantList);
 		var participantToAdd;
 		for (var j = 0; j < participantList.length; j++) {
 			(function(i){
@@ -76,13 +75,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 					})
 				
 			})(j);
-			console.log("j =");
-			console.log(j);
-			console.log(participantList[j]);
 		};
-		for (var b in participantList){
-			console.log(b);
-		}
 		res.json({statut:1});
 		});
 
