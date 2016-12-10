@@ -81,12 +81,12 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		var friendToInsert = req.body;
 		friendToInsert.created = new Date();
 
-		if(valueToInsert.user1Id==valueToInsert.user2Id){
+		if(friendToInsert.user1Id==friendToInsert.user2Id){
 			res.json({statut:10, result:"impossible to be friend with yourself ;)"});
 		}else{
 			frienddb.findOne({$or: [ 
-				{ user1Id: valueToInsert.user1Id, user2Id: valueToInsert.user2Id }, 
-				{ user1Id: valueToInsert.user2Id, user2Id: valueToInsert.user1Id }
+				{ user1Id: friendToInsert.user1Id, user2Id: friendToInsert.user2Id }, 
+				{ user1Id: friendToInsert.user2Id, user2Id: friendToInsert.user1Id }
 				]},
 				function(err, friendFound) {
 		   		if(err){
