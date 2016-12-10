@@ -111,7 +111,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 										console.log('********************************');
 										res.send(err);
 									}else{
-										res.json({statut:1,data:userToInsert});
+										res.json({statut:1,data:result});
 									}	
 								})
 		   				}
@@ -124,7 +124,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 								console.log('********************************');
 								res.send(err);
 							}else{
-								res.json({statut:1,data:userToInsert});
+								res.json({statut:1,data:result});
 							}	
 						})
 		   			}
