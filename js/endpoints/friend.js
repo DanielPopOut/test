@@ -39,7 +39,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 
 							}else{
 								if(users.length>0){
-									res.json({statut:1,data:users});
+									res.json({statut:1,data:users,frienddata:docs});
 								}else{
 									res.json({statut:0});
 								}

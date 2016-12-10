@@ -7,7 +7,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 	participantdb.createIndex( { eventId: 1, guestId: 1}, { unique: true } );
 
 
-	//Récupérer un utilisateur en entrant son id dans la requete
+	//Récupérer la liste des participants en entrant l'id de l'évènement dans la requete
 	app.get(callAdress,function(req,res){
 		// res.json({statut:1});
 		//RECUPERER UN UTILISATEUR AVEC SON IDENTIFIANT
@@ -57,22 +57,26 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		var participantList = req.body.data;
 		console.log(participantList);
 		var participantToAdd;
-		for (var i = 0; i < participantList.length; i++) {
-			console.log(participantList[i]);
-			participantToAdd = participantList[i];
-			participantToAdd.created = new Date();
-			participantdb.update({eventId: participantToAdd.eventId, guestId: participantToAdd.guestId},
-				participantToAdd,
-				{ upsert: true }
-				,function(err, result) {
-					if(err) {
-						console.log('********************************');
-						console.log('Error while inserting ' + collectionName);
-						console.log(err);
-						console.log('********************************');
-			   			res.json({statut:-1});
-					}	
-			})
+		for (var j = 0; j < participantList.length; j++) {
+			(function(i){
+				
+					console.log(participantList[i]);
+					participantToAdd = participantList[i];
+					participantToAdd.created = new Date();
+					participantdb.update({eventId: participantToAdd.eventId, guestId: participantToAdd.guestId},
+						participantToAdd,
+						{ upsert: true }
+						,function(err, result) {
+							if(err) {
+								console.log('********************************');
+								console.log('Error while inserting ' + collectionName);
+								console.log(err);
+								console.log('********************************');
+					   			res.json({statut:-1});
+							}	
+					})
+				
+			})(j);
 		};
 		res.json({statut:1});
 		});
