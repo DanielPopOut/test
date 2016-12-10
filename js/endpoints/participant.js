@@ -82,9 +82,9 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 
 			participantdb.findAndModify({
 				query: {eventId: joinParticipant.eventId, guestId: joinParticipant.guestId},
-				update : {$set: {status:joinParticipant.status, modified: new Date()} }
-				upsert: true }
-				,function(err, result) {
+				update : {$set: {status:joinParticipant.status, modified: new Date()} },
+				upsert: true },
+				function(err, result) {
 					if(err) {
 						console.log('********************************');
 						console.log('Error while inserting ' + collectionName);
