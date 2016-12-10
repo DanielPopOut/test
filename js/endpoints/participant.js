@@ -78,7 +78,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 			})(j);
 			console.log("j =");
 			console.log(j);
-			console.log(participantList[i]);
+			console.log(participantList[j]);
 		};
 		for (var b in participantList){
 			console.log(b);
