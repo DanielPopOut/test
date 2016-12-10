@@ -81,17 +81,27 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		var valueToInsert = req.body;
 		valueToInsert.created = new Date();
 
-		frienddb.insert(valueToInsert,function(err, result) {
-			if(err) {
-				console.log('********************************');
-				console.log('Error while post' + collectionName);
-				console.log(err);
-				console.log('********************************');
-				res.send(err);
-			}else{
-				res.json({statut:1,data:valueToInsert});
-			}	
-		})
+		if((valueToInsert.user1Id).equals(valueToInsert.user2Id)){
+			res.json({statut:10, result:"impossible to be friend with yourself ;)"});
+		}else{
+			frienddb.findAndModify({$or: [ { user1Id: valueToInsert.user1Id, user2Id: valueToInsert.user2Id }, { user1Id: valueToInsert.user2Id, user2Id: valueToInsert.user1Id }] },
+				[],
+				{$set: { modified: new Date()}},
+				{upsert: true, new:true},
+				function(err, result) {
+					if(err) {
+						console.log('********************************');
+						console.log('Error while post' + collectionName);
+						console.log(err);
+						console.log('********************************');
+						res.send(err);
+					}else{
+						res.json({statut:1,data:result});
+					}	
+				}
+			)
+		}
+		
 		});
 
 
