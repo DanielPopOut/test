@@ -24,27 +24,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 				}else{
 					if(docs.length>0){
 						//SI ON A UN RESULTAT
-						for (var i = 0; i < docs.length; i++) {
-							console.log(docs[i]);
-							if(docs[i].user1Id == identifiant){
-								friendId_list.push(ObjectId(docs[i].user2Id));
-							}else {
-								friendId_list.push(ObjectId(docs[i].user1Id));
-							}
-						};
-						console.log(friendId_list);
-						userdb.find({ _id: { $in: friendId_list } }).toArray(function(err, users) {
-							console.log(users);
-							if(err){
-
-							}else{
-								if(users.length>0){
-									res.json({statut:1,data:users,frienddata:docs});
-								}else{
-									res.json({statut:0});
-								}
-							}
-						});
+						res.json({statut:1,data:docs});
 					}else{
 						//SI ON N'A PAS DE RESULTATS
 						res.json({statut:0});
@@ -54,16 +34,45 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 	});
 
 
+app.get(callAdress+'/real',function(req,res){
+		// res.json({statut:1});
+		//RECUPERER UN UTILISATEUR AVEC SON IDENTIFIANT
+		var identifiant = req.query.id;
+		var friendId_list = [];
+
+		//POUR RECUPERER UN ET UN SEUL UTILISATEUR
+		frienddb.find(
+		   	{ $or: [ { user1Id: identifiant }, { user2Id: identifiant } ] }, {status: 1} ).toArray(function(err, docs) {
+		   		console.log(docs);
+		   		if(err){
+					console.log('****************************');
+		   			console.log('Error while getting user for login');
+		   			console.log('****************************');
+		   			res.json({statut:-1});
+				}else{
+					if(docs.length>0){
+						//SI ON A UN RESULTAT
+						res.json({statut:1,data:docs});
+					}else{
+						//SI ON N'A PAS DE RESULTATS
+						res.json({statut:0});
+					}
+				}
+		   	})
+	});
+
+
+
 	app.put(callAdress,function(req,res){
 		var valueToInsert = req.body;
 		valueToInsert.created = new Date();
 		valueToInsert.modified = new Date();
-		var identifiant = req.query.identifiant;
-
-		userdb.update({_id: ObjectId(identifiant)},
-			valueToInsert,
-			{ upsert: false }
-			,function(err, result) {
+		var identifiant = req.query.id;
+		console.log(ObjectId(identifiant));
+		console.log(valueToInsert._id);
+		frienddb.update({_id: ObjectId(valueToInsert._id)},
+			{$set: {state: valueToInsert.state}},
+			function(err, result) {
 				if(err) {
 					console.log('********************************');
 					console.log('Error while inserting ' + collectionName);
@@ -98,7 +107,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 		   			if (friendFound!=null){
 		   				if (friendFound.state=="1"){
 		   					res.json({statut:10,result:"you are already friends"});
-		   				}else if(friendFound.state=="2"){
+		   				}else {
 		   					friendToInsert.modified=new Date();
 		   					friendToInsert.created = new Date();
 		   					frienddb.update({_id: friendFound._id},
@@ -159,7 +168,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 	app.delete(callAdress,function(req,res){
 		// res.json({statut:1});
 		//RECUPERER UN UTILISATEUR AVEC SON IDENTIFIANT
-		var identifiant = req.query.identifiant;
+		var identifiant = req.query.id;
 
 		//POUR RECUPERER UN ET UN SEUL UTILISATEUR
 		frienddb.deleteOne(
