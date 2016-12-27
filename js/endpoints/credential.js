@@ -1,4 +1,4 @@
-module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
+module.exports = function (app,bcrypt,dateFormat,ObjectId,db, sender) {
 	//ici on a juste un id, mail et password
 	var collectionName = 'credential';
 	var callAdress = '/credential';

@@ -1,4 +1,4 @@
-module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
+module.exports = function (app,bcrypt,dateFormat,ObjectId,db, sender) {
 	//ici on a juste un id, mail et mdp
 	var collectionName = 'event';
 	var callAdress = '/event';
@@ -8,7 +8,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 	//Récupérer un utilisateur en entrant son id dans la requete
 	app.get('/event',function(req,res){
 		// res.json({statut:1});
-		//RECUPERER UN UTILISATEUR AVEC SON IDENTIFIANT
+		//RECUPERER UN UTILISATEUR AVEC SON IDENTIFIAN
 		var identifiant = req.query.identifiant;
 
 		//POUR RECUPERER UN ET UN SEUL UTILISATEUR

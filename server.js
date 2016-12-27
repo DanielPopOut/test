@@ -80,14 +80,92 @@ mongodb.MongoClient.connect(MONGODB_URI, function(err, database) {
 	db = database;
 	//USERS C'EST MON DOCUMENT
 	users = db.collection('users');
+	var gcm = require('node-gcm');
+		// Set up the sender with you API key 
+	var sender = new gcm.Sender('AAAAaDHQoyE:APA91bHwJpRC6YWCW9EUAvNW7HzIclBLPDw4us7vl60nreV8fgUHsiH6BQqWcaurdFIZYaAKp5eE4wZRBHDwfvaKx908NjA6FsN47_yBFOciwBJqpQRW8fh6Rysc7_ve5zMOiRGS44s51M0p__heDj1unZT6PMgIQA');
+
 
 	//ON INCLU UN SCRIPT QUI VA CONTENIR NOS ENDPOINT
 	require('./js/demo/demo.js')(app,bcrypt,dateFormat,ObjectId,db,users);
-	require('./js/endpoints/user.js')(app,bcrypt,dateFormat,ObjectId,db);
-	require('./js/endpoints/credential.js')(app,bcrypt,dateFormat,ObjectId,db);
-	require('./js/endpoints/event.js')(app,bcrypt,dateFormat,ObjectId,db);
-	require('./js/endpoints/friend.js')(app,bcrypt,dateFormat,ObjectId,db);
-	require('./js/endpoints/participant.js')(app,bcrypt,dateFormat,ObjectId,db);
+	require('./js/endpoints/user.js')(app,bcrypt,dateFormat,ObjectId,db, sender);
+	require('./js/endpoints/credential.js')(app,bcrypt,dateFormat,ObjectId,db, sender);
+	require('./js/endpoints/event.js')(app,bcrypt,dateFormat,ObjectId,db, sender);
+	require('./js/endpoints/friend.js')(app,bcrypt,dateFormat,ObjectId,db, sender);
+	require('./js/endpoints/participant.js')(app,bcrypt,dateFormat,ObjectId,db, sender);
+	require('./js/endpoints/notification.js')(app,bcrypt,dateFormat,ObjectId,db, sender, gcm);
+
+
+	 
+	// Create a message 
+	// ... with default values 
+	var message = new gcm.Message();
+	 
+	// ... or some given values 
+	// var message = new gcm.Message({
+	//     collapseKey: 'demo',
+	//     priority: 'high',
+	//     contentAvailable: true,
+	//     delayWhileIdle: true,
+	//     timeToLive: 3,
+	//     restrictedPackageName: "somePackageName",
+	//     dryRun: true,
+	//     data: {
+	//         key1: 'message1',
+	//         key2: 'message2'
+	//     },
+	//     notification: {
+	//         title: "Hello, World",
+	//         icon: "ic_launcher",
+	//         body: "This is a notification that will be displayed ASAP."
+	//     }
+	// });
+	 
+	// Change the message data 
+	// ... as key-value 
+	message.addData('title','Ajout d\'ami');
+	message.addData('action','message2');
+	 
+	// ... or as a data object (overwrites previous data object) 
+	message.addData({
+	    title: 'Ajout d\'ami',
+	    smalltext: 'message2'
+	});
+
+	message.addNotification({
+		title: "Hello, World",
+		icon: "ic_launcher",
+	    body: "This is a notification that will be displayed ASAP."	
+	});
+	 
+	 	// 			sender.setAPIKey('AAAAO49ABbQ:APA91bFUHuwyz2SEd5sl7vGs-RWEQDa5Arf4JnJDE3N-DoLv9ouQ_QJgc8q9FjD-i53u8kHOfkVnBZTu4Rt-y87qpKSVRq56DvEfQI1RIKRgTtqdW8DyBZWSOrpeo5JXMoXGE3ZVO9OAsDogX1l_0oesChd03tACnw');
+
+	// var sender = new gcm.Sender('AIzaSyAW77iyf4u-kSF5EeUNYZJWSiaRp5hiCX8');
+
+	// Add the registration tokens of the devices you want to send to 
+	var registrationTokens = [];
+	registrationTokens.push('czKGam7tmc4:APA91bEm6ZHbWFQM2aSne59FpgBeBipiqauHsvpgBzM5ZcPcTQYAa-dIfMHD-8nzLUH2RbvsGkDbK-lkiWCj6QC14SnSDu5RwcqGN7TRJZmz5Wh1t5dDrTcbRlKeXZTSB7FDTgnlcolm');
+	registrationTokens.push('egDGwf9J4QA:APA91bGiM-Tp6Z2wp9zIvsXq1001iMpVSjI-tuQaVZCwjtU-HZRj2FM4WI_C13ujZBf_pOYbCSpclP1rjZCqZe1XmCrfsdCze9eWo7wM9ntIifbluIlEbz1t-FaKcCnFYTKaerIRMe_l');
+	 
+	 registrationTokens.push('c_Xgji5wDEs:APA91bEpq5qi_fygwz-LITKmCWlq648iMbMjVC8lZ_H-d41t7Gl0S88h1Sz4HXbGptKbmNlU5RZmvfASvFItrOBxbhO1J_AS1NPZJbIq4ODfO3EaN9Xfz70kOoSxTzxGXhSKW4RScdtu');
+	// // Send the message 
+	// // ... trying only once 
+	// sender.sendNoRetry(message, { registrationTokens: registrationTokens }, function(err, response) {
+	//   if(err) console.error(err);
+	//   else    console.log(response);
+	// });
+	 
+	// // ... or retrying 
+	// sender.send(message, { registrationTokens: registrationTokens }, function (err, response) {
+	//   if(err) console.error(err);
+	//   else    console.log(response);
+	// });
+	 
+	// ... or retrying a specific number of times (10) 
+	sender.send(message, { registrationTokens: registrationTokens }, 10, function (err, response) {
+	  if(err) console.error(err);
+	  else    console.log(response);
+	});
+
 
 	//DEMARRE LE SERVEUR
 	server.listen(app.get('port'));

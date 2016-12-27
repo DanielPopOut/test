@@ -1,8 +1,10 @@
-module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
+module.exports = function (app,bcrypt,dateFormat,ObjectId,db, sender,gcm) {
 	//ici on a juste un id, mail et mdp
+	var gcm=require('node-gcm');;
 	var collectionName = 'participant';
 	var callAdress = '/participant';
 	var participantdb = db.collection(collectionName);
+	var notificationdb = db.collection('notificationtoken');
 
 	participantdb.createIndex( { eventId: 1, guestId: 1}, { unique: true } );
 
@@ -57,6 +59,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 	app.post(callAdress,function(req,res){
 		var participantList = req.body.data;
 		var participantToAdd;
+
 		for (var j = 0; j < participantList.length; j++) {
 				(function(i){
 						console.log(participantList[i]);
@@ -69,12 +72,45 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 									console.log(err);
 									console.log('********************************');
 								}
-						})
-					
+						});
+						notificationdb.findOne({_id: ObjectId(participantToAdd.guestId)},function(err, notification) {
+						   		console.log(notification);
+						   		var registrationTokens = [];
+						   		if(err){
+						   			console.log('****************************');
+						   			console.log('Error while getting notification for login');
+						   			console.log('****************************');
+						   			res.json({statut:-1});
+						   		}else{
+						   			var message = new gcm.Message();
+									message.addNotification({
+										title: participantToAdd.hostId + " t'invite à un event",
+										icon: "ic_launcher",
+									    body: "Ce sera ouf !"	
+									});
+					   				registrationTokens.push(notification.notificationtoken);
+									sender.send(message, { registrationTokens: registrationTokens }, 10, function (err, response) {
+										if(err) console.error("error" + err);
+										else    console.log(response);
+									});
+					   			
+						   		}
+						   	}
+						);
 				})(j);
 			};
+
+			
+
+			console.log(registrationTokens);
+			// registrationTokens.push('ci1EbtDch0s:APA91bFZ20d5HRsDrZ_SsyhxW3q63Z8XdhpApzZQNeFC--LRMok6-4cDWWfiZdzvjzbJEN7RNuqIjN-qObuJNzyZ06EROlBOc_Yn7TguK1EaXXA8uGByUGWKqpnD9UMQSHRxBrwSgFr8');
+			
 			res.json({statut:1});
 		});
+
+	function sendPartiipantNotification(){
+
+	}
 
 			//enregistrer un utilisateur
 	app.post(callAdress+'/join',function(req,res){
@@ -82,7 +118,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 
 			participantdb.findAndModify({eventId: joinParticipant.eventId, guestId: joinParticipant.guestId},
 				[],
-				{$set: {status:joinParticipant.status, modified: new Date()} },
+				{$set: {status:joinParticipant.status, guestName:joinParticipant.guestName, modified: new Date()} },
 				{upsert: true, new:true},
 				function(err, result) {
 					if(err) {

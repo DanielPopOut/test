@@ -1,4 +1,4 @@
-module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
+module.exports = function (app,bcrypt,dateFormat,ObjectId,db, sender) {
 	//ici on a juste un id, mail et mdp
 	var collectionName = 'friend';
 	var callAdress = '/friend';
@@ -34,7 +34,7 @@ module.exports = function (app,bcrypt,dateFormat,ObjectId,db) {
 	});
 
 
-app.get(callAdress+'/real',function(req,res){
+	app.get(callAdress+'/real',function(req,res){
 		// res.json({statut:1});
 		//RECUPERER UN UTILISATEUR AVEC SON IDENTIFIANT
 		var identifiant = req.query.id;
@@ -42,7 +42,7 @@ app.get(callAdress+'/real',function(req,res){
 
 		//POUR RECUPERER UN ET UN SEUL UTILISATEUR
 		frienddb.find(
-		   	{ $or: [ { user1Id: identifiant }, { user2Id: identifiant } ] }, {status: 1} ).toArray(function(err, docs) {
+		   	{ $or: [ { user1Id: identifiant }, { user2Id: identifiant } ], state: 1} ).toArray(function(err, docs) {
 		   		console.log(docs);
 		   		if(err){
 					console.log('****************************');
