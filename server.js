@@ -69,6 +69,8 @@ var db;
 //CREATION D'UN POINTEUR VERS UN DOCUMENT
 var users;
 
+app.get(callAdress,function(req,res){res.status(400).send('banana')});
+
 //CONNEXION A LA BASE DE DONNEE MONGODB VIA URL
 mongodb.MongoClient.connect(MONGODB_URI, function(err, database) {
   	if(err){
